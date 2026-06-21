@@ -1,0 +1,81 @@
+Machine start G-Code:
+
+; --- START SETUP & VARIABLES ---
+MMU_START_SETUP INITIAL_TOOL={initial_tool} TOTAL_TOOLCHANGES=!total_toolchanges! REFERENCED_TOOLS=!referenced_tools! TOOL_COLORS=!colors! TOOL_TEMPS=!temperatures! TOOL_MATERIALS=!materials! FILAMENT_NAMES=!filament_names! PURGE_VOLUMES=!purge_volumes!
+SET_PRINT_STATS_INFO TOTAL_LAYER=[total_layer_count]
+SET_GCODE_VARIABLE MACRO=PRINTER_PARAM VARIABLE=fan0_min VALUE=30
+SET_VELOCITY_LIMIT ACCEL_TO_DECEL=2500
+M220 S100
+M221 S100
+
+; --- STEP 1: BED HEATING & NOZZLE PREHEAT ---
+M140 S[bed_temperature_initial_layer_single] ; Start bed heat (non-blocking)
+M104 S120                                    ; Soften plastic at 120°C (no ooze)
+
+; --- STEP 2: HOMING ---
+G28 X Y                                      ; Home XY
+G28 Z                                        ; Home Z
+
+; --- STEP 3: PARKING & FINAL HEAT ---
+G1 X-2.0 Y20 Z1.0 F5000.0                    ; Park at Z0.8
+M190 S[bed_temperature_initial_layer_single] ; Wait for bed
+M104 S[nozzle_temperature_initial_layer]     ; Heat nozzle to full
+M109 S[nozzle_temperature_initial_layer]     ; Wait for nozzle
+
+; --- STEP 4: MMU INITIALIZATION & LOAD ---
+MMU_START_CHECK
+MMU_START_LOAD_INITIAL_TOOL                  ; Load while parked at Z0.8
+
+; --- STEP 5: DYNAMIC SMEAR (The "No-Blob" Move) ---
+; Move 5mm forward (Y20 to Y25) while maintaining height at Z0.8
+G1 Y25 Z1 E2 F1000.0                       ; Initial flow at 0.8mm height
+; Move forward and drop from Z0.8 down to Z0.2
+G1 Y45 Z0.2 E8 F1000.0                       ; The "Dive" to smear the blob
+
+; --- STEP 6: PURGE LINE SEQUENCE ---
+G92 E0                                       ; Reset Extruder
+G1 Y145.0 F1500.0 E15                        ; First line (now at Z0.2)
+G1 X-1.7 F5000.0                             ; Side step
+G1 Y30 F1500.0 E15                           ; Second line
+G92 E0                                       ; Final Reset
+G1 E-0.8 F2400                               ; Retract - kill nozzle pressure
+G92 E0                                       ; Ready for first layer
+
+----------------------------------------------------------------------------------------------------------------------------------
+Machine end G-code:
+
+G92 E0
+G1 E-0.8 F1800                  ; Retract slightly
+G1 Z{max_layer_z + 0.5} F1800   ; Lift
+
+; --- SAFE CLEARANCE ---
+{if max_layer_z < (max_print_height - 25)}
+G1 Z{max_layer_z + 25} F900
+{else}
+G1 Z{max_print_height} F900
+{endif}
+
+
+M106 S255                        ; Fan full
+M140 S0                          ; Bed off
+
+; --- THE FINISH ---
+MMU_END                          ; Unloads AND moves bed forward
+
+M104 S0                          ; Heater off
+M106 S0                          ; Fan off
+M84 X Y E                        ; Motors off
+----------------------------------------------------------------------------------------------------------------------------------
+Before layer change G-code:
+
+;BEFORE_LAYER_CHANGE
+;[layer_z]
+G92 E0
+_MMU_UPDATE_HEIGHT
+
+----------------------------------------------------------------------------------------------------------------------------------
+Layer change G-code:
+
+SET_PRINT_STATS_INFO CURRENT_LAYER={layer_num + 1}
+_MMU_UPDATE_HEIGHT
+
