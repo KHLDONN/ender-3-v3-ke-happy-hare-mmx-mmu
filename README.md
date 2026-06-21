@@ -1,5 +1,5 @@
 # Ender 3 V3 KE Happy Hare MMX MMU(Multi Material Unit)
-Guide to install Happy Hare on Ender 3 V3 KE Nebula Pad with MMX MMU.
+Guide to install Happy Hare on Ender 3 V3 KE Nebula Pad with MMX MMU + my setup and settings.
 This is just what worked on my own printer. Use it at your own risk. You can break stuff or void your warranty, so make a backup of your configs before you start.
 
 After build the MMX and flashed ebb42.
@@ -35,6 +35,8 @@ Run the script:
 
 ```bash
 sh /usr/data/helper-script/helper.sh
+
+
 ```
 In the menu, must with order:
 
@@ -214,3 +216,21 @@ MMU_GATE_MAP GATE=0 MATERIAL=ABS COLOR=black TEMP=255 NAME="ABS Black"
 ```
 
 Do the same for your other gates/materials.
+
+---
+
+- Filament hub 4 lanes for Ender 3 V3 KE:  
+  https://www.printables.com/model/1757552-filament-hub-4-lanes-ender-3-v3-ke
+- Toolhead - Filament Cutter - Creality Ender 3 V3 KE:
+  https://www.printables.com/model/1433552-filament-cutter-creality-ender-3-v3-ke
+- Camera mount:
+- https://www.printables.com/model/1675163-longer-front-nebula-camera-mount-for-ender-3-v3-ke
+- Screen holder:
+- https://www.printables.com/model/1583290-ender-3-v3-ke-screen-holder-guppy-screen
+
+![setup](images/1.jpg)
+![setup](images/2.jpg)
+![setup](images/3.jpg)
+![setup](images/4.jpg)
+
+- [My settings and configs](settings-configs/)
