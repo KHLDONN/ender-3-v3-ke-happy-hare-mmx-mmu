@@ -228,9 +228,20 @@ Do the same for your other gates/materials.
 - Screen holder:
 - https://www.printables.com/model/1583290-ender-3-v3-ke-screen-holder-guppy-screen
 
-![setup](images/1.jpg)
-![setup](images/2.jpg)
-![setup](images/3.jpg)
-![setup](images/4.jpg)
+<p align="center">
+  <img src="images/1.jpg" alt="setup 1" width="400">
+</p>
+
+<p align="center">
+  <img src="images/2.jpg" alt="setup 2" width="400">
+</p>
+
+<p align="center">
+  <img src="images/3.jpg" alt="setup 3" width="400">
+</p>
+
+<p align="center">
+  <img src="images/4.jpg" alt="setup 4" width="400">
+</p>
 
 - [My settings and configs](settings-configs/)
