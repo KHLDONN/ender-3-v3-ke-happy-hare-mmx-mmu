@@ -1,7 +1,9 @@
 # Ender 3 V3 KE Happy Hare MMX MMU(Multi Material Unit)
 Guide to install Happy Hare on Ender 3 V3 KE Nebula Pad with MMX MMU.
 This is just what worked on my own printer. Use it at your own risk. You can break stuff or void your warranty, so make a backup of your configs before you start.
+
 After build the MMX and flashed ebb42.
+
 ebb42 must be flashed with klipper v0.11.0
 
 ## 1. Enable root and SSH into the printer
