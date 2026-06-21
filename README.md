@@ -1,4 +1,4 @@
-# ender-3-v3-ke-happy-hare-mmx-mmu
+# Ender 3 V3 KE Happy Hare MMX MMU
 Guide to install Happy Hare on Ender 3 V3 KE Nebula Pad with MMX MMU.
 This is just what worked on my own printer. Use it at your own risk. You can break stuff or void your warranty, so make a backup of your configs before you start.
 
