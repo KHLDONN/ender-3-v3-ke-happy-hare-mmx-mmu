@@ -3,7 +3,7 @@ Guide to install Happy Hare on Ender 3 V3 KE Nebula Pad with MMX MMU.
 This is just what worked on my own printer. Use it at your own risk. You can break stuff or void your warranty, so make a backup of your configs before you start.
 
 ## 1. Enable root and SSH into the printer
-first enable the root from the printer screen nebula pad, then connect to the printer:
+First enable root from the printer screen (Nebula Pad), then connect to the printer.
 
 ssh root@here enter your printer ip, and use the password:
 
@@ -11,12 +11,14 @@ ssh root@here enter your printer ip, and use the password:
 ssh root@192.168.8.120
 Creality2023
 ```
-if you get error try this:
+If you get error try this:
 
 ```bash
 ssh-keygen -R 192.168.8.120
 ```
-now try to connect again and type yes
+Now try to connect again and type `yes`.
+
+---
 
 ## 2. Install Creality Helper Script
 
@@ -24,17 +26,20 @@ now try to connect again and type yes
 cd /usr/data
 git clone https://github.com/Guilouz/Creality-Helper-Script.git /usr/data/helper-script
 ```
-after install run
+
+Run the script:
+
 ```bash
 sh /usr/data/helper-script/helper.sh
 ```
-- 1- install
-now install these with order:
-- 1- moonraker  
-- 3- mainsail  
-- 4- entware 
+In the menu, must with order:
 
-now you need to close the ssh connection and login again then:
+- 1 – Install  
+  - 1 – Moonraker  
+  - 3 – Mainsail  
+  - 4 – Entware  
+
+After that, you need to close the SSH connection and log in again, then:
 
 ```bash
 sed -i '1s|.*|src/gz entware http://bin.tranducanh.com/mipselsf-k3.4|' /opt/etc/opkg.conf
@@ -42,14 +47,23 @@ opkg update
 ```
 
 Start the helper script again:
+
 ```bash
 sh /usr/data/helper-script/helper.sh
 ```
-- 13- usb camera
-after install exit helper script.
+
+Install:
+
+- 13 – USB camera  
+
+After install, exit the helper script.
+
+---
 
 ## 3. Install Happy Hare 3.3.0
-here you need to install happy hare 3.3.0 version.
+
+Here you need to install Happy Hare 3.3.0 version:
+
 ```bash
 git clone https://github.com/moggieuk/Happy-Hare.git
 cd Happy-Hare
@@ -61,7 +75,8 @@ git checkout v3.3.0
 
 bash install.sh -i
 ```
-then select these from happy hare menu:
+Then select these from Happy Hare menu:
+
 ```text
 13
 4
@@ -77,25 +92,30 @@ n
 n
 ```
 
-now reboot the printer and open mainsail page for the printer:
+Now reboot the printer and open Mainsail page for the printer:
 ```bash
-192.168.8.120:4409
+http://192.168.8.120:4409
 ```
+
+---
+
 ## 4. Fix LED error and mmu_vars
 
-In Mainsail, open `printer.cfg` and comment these:
+In Mainsail, open `printer.cfg` and comment these lines:
 
 ```ini
 #[include mmu/base/*.cfg]
 #[include mmu/optional/client_macros.cfg]
 ```
+
 Click Save and restart, then SSH login again.
-Fix Led error:
+
+Fix led error:
 ```bash
 wget -O /usr/share/klipper/klippy/extras/led.py \
   https://raw.githubusercontent.com/Klipper3d/klipper/master/klippy/extras/led.py
 ```
-Fix mmu_vars.cfg error:
+Fix `mmu_vars.cfg` error:
 
 In `mmu_macro_vars.cfg`, under `[save_variables]` set:
 
@@ -103,7 +123,9 @@ In `mmu_macro_vars.cfg`, under `[save_variables]` set:
 filename: /usr/data/printer_data/config/mmu/mmu_vars.cfg
 ```
 
-click save and restart.
+Click save and restart.
+
+---
 
 ## 5. Happy Hare calibration
 
@@ -134,23 +156,38 @@ MMU_CALIBRATE_SELECTOR ANGLE=180
 
 Put those values into `mmu_vars.cfg` in the mmu_selector_angles.
 
+---
+
 ## 6. Install Guppy Screen
-Start Script helper
+Start Script helper:
+
 ```bash
 sh /usr/data/helper-script/helper.sh
 ```
-- 1- install
-- 5- Klipper Gcode shell command
-- 
+- 1 – Install  
+  - 5 – Klipper Gcode shell command  
+ 
 Back then:
 
-- 3- Customize  
-- 3- Guppy Screen  
-- choose `release` and answer `y`
+- 3 – Customize  
+  - 3 – Guppy Screen  
+  - choose `release` and answer `y`
 
-if you want to rotate guppy screen go to /usr/data/guppyscreen and edit guppyconfig.json change "display_rotate": 0 to 2.
+If you want to rotate Guppy Screen, go to `/usr/data/guppyscreen` and edit `guppyconfig.json`, change:
 
-## 7. Automatic z offset, bed mesh, and gate filament set:
+```json
+"display_rotate": 0
+```
+
+to:
+
+```json
+"display_rotate": 2
+```
+
+---
+
+## 7. Automatic z offset, bed mesh, and gate filament set
 
 Automatic z offset:
 
@@ -164,8 +201,24 @@ Bed mesh:
 G29
 SAVE_CONFIG
 ```
-Filament:
+Automatic Z offset:
+
+```gcode
+Z_COMPENSATE_TEST
+SAVE_CONFIG
+```
+
+Bed mesh:
+
+```gcode
+G29
+SAVE_CONFIG
+```
+
+Filament example:
+
 ```gcode
 MMU_GATE_MAP GATE=0 MATERIAL=ABS COLOR=black TEMP=255 NAME="ABS Black"
 ```
+
 Do the same for your other gates/materials.
