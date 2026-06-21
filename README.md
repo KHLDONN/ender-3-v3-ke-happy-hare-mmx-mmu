@@ -189,18 +189,6 @@ to:
 
 ## 7. Automatic z offset, bed mesh, and gate filament set
 
-Automatic z offset:
-
-```gcode
-Z_COMPENSATE_TEST
-SAVE_CONFIG
-```
-Bed mesh:
-
-```gcode
-G29
-SAVE_CONFIG
-```
 Automatic Z offset:
 
 ```gcode
